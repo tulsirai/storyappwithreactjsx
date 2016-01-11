@@ -2,6 +2,11 @@ class StoriesController < ApplicationController
 	before_action :authenticate_user!, only: [:new, :create, :upvote, :downvote]  #comes from devise
 	def index
 		@stories = Story.all.order(id: :desc).page(params[:page]).per(5)
+		@categories = Category.all
+		respond_to do |format|
+			format.html
+			format.json { render json: @stories.to_json }
+		end
 	end
 
 	def new
@@ -24,16 +29,16 @@ class StoriesController < ApplicationController
 		@comments = Comment.where(story_id: @story)
 	end
 
-	def upvote
-		@story = Story.find(params[:id])
+	def upvote	
+		@story = Story.find(params[:id])	
 		@story.upvote_by(current_user)
-		redirect_to :back
+		render json: @story
 	end
 
-	def downvote
-		@story = Story.find(params[:id])
+	def downvote	
+		@story = Story.find(params[:id])	
 		@story.downvote_by(current_user)
-		redirect_to :back
+		render json: @story
 	end
 
 	def search
@@ -45,6 +50,7 @@ class StoriesController < ApplicationController
 	end
 
 	private
+
 		def story_param
 			params.require(:story).permit(:body, :scary, :category_id)
 		end

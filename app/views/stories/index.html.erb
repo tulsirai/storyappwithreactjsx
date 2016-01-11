@@ -1,5 +1,5 @@
 
-<%= render partial: 'layouts/stories', stories: @stories %>
+<%= react_component 'Stories', { stories: @stories, categories: @categories } %>
 <div class="container">
     <%= paginate @stories %>
 </div>

@@ -1,5 +1,13 @@
 class CommentsController < ApplicationController
-	before_action :authenticate_user!
+	before_action :authenticate_user!, except: :index
+
+	def index
+		@comments = Comment.where(story_id: params[:story_id])
+		respond_to do |format|
+			format.html
+			format.json { render json: @comments }
+		end 
+	end
 
 	def create
 		@story = Story.find(params[:story_id])

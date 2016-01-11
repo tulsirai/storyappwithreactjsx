@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   resources :stories do
     resources :comments
   	member do
-		put :like, to: 'stories#upvote'
-	  	put :dislike, to:'stories#downvote'
+		  put :like,      to: 'stories#upvote'
+	  	put :dislike,   to: 'stories#downvote'
+      get :user,      to:  'users#story_user'
+      get :category,  to: 'categories#story_category'
   	end
 
     collection do
