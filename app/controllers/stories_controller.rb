@@ -17,16 +17,21 @@ class StoriesController < ApplicationController
 		@story = Story.new(story_param)
 		@story.user = current_user
 		if @story.save
-			redirect_to @story
+			render json: @story
 		else
-			flash[:danger] = @story.errors.full_messages.to_sentence
-			render :new
+			render json: @message.errors, status: :unprocessable_entity
 		end
 	end
 
 	def show
 		@story = Story.find(params[:id])
 		@comments = Comment.where(story_id: @story)
+	end
+
+	def destroy
+		@story = Story.find(params[:id])
+		@story.destroy
+		render json: @story
 	end
 
 	def upvote	
