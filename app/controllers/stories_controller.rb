@@ -49,6 +49,13 @@ class StoriesController < ApplicationController
 		end
 	end
 
+	def all_stories
+		@stories = Story.all
+		respond_to do |format|
+			format.json{ render json: @stories}
+		end
+	end
+
 	private
 
 		def story_param

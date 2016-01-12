@@ -8,6 +8,15 @@ var Stories = React.createClass({
 		}
 	},
 
+	handleCategoryClick: function(category, e){
+	  	var self = this;
+	  	$.getJSON('/all_stories.json', function(allStories){
+	  		self.setState({stories: allStories});
+	  		var categoryStories = _.where(self.state.stories, { 'category_id' : category.id})
+	  		self.setState({ stories: categoryStories.slice(0,26) });
+	  	}.bind(this));
+	},
+
 	render: function(){
     var self = this;
     return (
@@ -25,33 +34,18 @@ var Stories = React.createClass({
             <div className="panel panel-default">
               <div className="panel-heading text-center">Categories</div>
               <ul className="list-group">
-                { this.state.categories.map(function(category){
-                  return (
-                    <Category key={ category.id } 
-                           category={ category } />
-                  )
-                })}
+				  { this.state.categories.map(function(category){
+				    return (
+				      <Category key={ category.id }
+				        category={ category }
+				        handleAllCategories={ self.handleCategoryClick } /> //adding this line
+				    )
+				  })}
               </ul>
             </div>
           </div>
         </div>
       </div>
-    )
-  }
-})
-
-var Category = React.createClass({
-  getInitialState: function(){
-    return {
-      name: ''
-    }
-  },
-
-  render: function(){
-    return (
-      <li className="list-group-item">
-        <a>{ this.props.category.name }</a>
-      </li>
     )
   }
 })
